@@ -95,7 +95,7 @@ const App = () => {
     <div className="App">
       <div className="control-panel">
         <h1>Lunch Roulette</h1>
-        <button onClick={handleOpenModal}>Add Restaurant</button>
+        <button className="add-button" onClick={handleOpenModal}>식당 추가</button>
         <ul>
           {candidates.map((candidate, index) => (
             <li key={index} className="restaurant-item">
@@ -127,8 +127,8 @@ const App = () => {
           <div className="winner-announcement">
             <h2>축하합니다!</h2>
             <p>오늘 점심은 <span style={{fontWeight: 'bold'}}>{winner.name}</span> 입니다!</p>
-            <p onClick={() => window.open(winner.mapLink)}>{winner.mapLink}</p>
-            <button className="copy-map-link" onClick={() => navigator.clipboard.writeText(winner.mapLink)}>Copy Map Link</button>
+            {winner.mapLink && <p onClick={() => window.open(winner.mapLink)}>{winner.mapLink}</p>}
+            {winner.mapLink && <button className="copy-map-link" onClick={() => navigator.clipboard.writeText(winner.mapLink)}>Copy Map Link</button>}
           </div>
         )}
       </div>

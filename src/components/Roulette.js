@@ -246,7 +246,7 @@ const Roulette = ({ candidates, onDraw }) => {
     <div className="roulette-container">
       <div ref={scene} className="roulette-scene"></div>
       <div className="candidate-info">
-        <h2>Candidate Information</h2>
+        <h2>후보</h2>
         <ul>
           {candidates.map((candidate, index) => (
             <li

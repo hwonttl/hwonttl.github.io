@@ -32,30 +32,30 @@ const Modal = ({ isOpen, onClose, onSubmit, restaurant, setRestaurant }) => {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <h2>{localRestaurant.name ? "Edit Restaurant" : "Add Restaurant"}</h2>
+        <h2>식당 정보</h2>
         <form onSubmit={handleSubmit}>
           <div>
-            <label>Name</label>
+            <label>이름(<span style={{color: "red"}}>*</span>)</label>
             <input type="text" name="name" value={localRestaurant.name} onChange={handleChange} required />
           </div>
           <div>
-            <label>Menu (comma separated)</label>
-            <input type="text" name="menu" value={localRestaurant.menu} onChange={handleChange} required />
+            <label>메뉴 (콤마구분)</label>
+            <input type="text" name="menu" value={localRestaurant.menu} onChange={handleChange} />
           </div>
           <div>
-            <label>Map Link</label>
-            <input type="text" name="mapLink" value={localRestaurant.mapLink} onChange={handleChange} required />
+            <label>지도 링크</label>
+            <input type="text" name="mapLink" value={localRestaurant.mapLink} onChange={handleChange} />
           </div>
           <div>
-            <label>Suitable For (comma separated min, max)</label>
+            <label>적정 인원 (콤마구분 최소, 최대)</label>
             <input type="text" name="suitableFor" value={localRestaurant.suitableFor} onChange={handleChange} required />
           </div>
           <div>
-            <label>URL</label>
-            <input type="text" name="url" value={localRestaurant.url} onChange={handleChange} required />
+            <label>기타 링크</label>
+            <input type="text" name="url" value={localRestaurant.url} onChange={handleChange} />
           </div>
-          <button type="submit">Submit</button>
-          <button type="button" onClick={onClose}>Cancel</button>
+          <button type="submit">제출</button>
+          <button type="button" onClick={onClose}>취소</button>
         </form>
       </div>
     </div>
