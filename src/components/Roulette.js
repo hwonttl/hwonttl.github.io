@@ -148,7 +148,7 @@ const Roulette = ({ candidates, onDraw }) => {
     Runner.run(runner, engine);
     Render.run(render);
 
-    const hole = Bodies.rectangle(400, 870, 90, 20, {
+    const hole = Bodies.rectangle(400, 890, 90, 20, {
       isStatic: true,
       isSensor: true,
       label: "hole",
