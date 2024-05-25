@@ -1,38 +1,84 @@
+/* src/App.css */
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  height: 100vh;
+}
+
+.control-panel {
+  width: 300px;
+  padding: 20px;
+  background-color: #f8f8f8;
+  border-left: 1px solid #ddd;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.control-panel h1 {
+  font-size: 1.5em;
+  margin-bottom: 20px;
+}
+
+.control-panel button {
+  display: block;
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.control-panel ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.control-panel ul li.restaurant-item {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.control-panel ul li .restaurant-button {
+  flex-grow: 1;
+  margin-right: 10px;
+  text-align: left;
+}
+
+.control-panel ul li .remove-button {
+  background: none;
+  border: none;
+  color: red;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.control-panel label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.control-panel input {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.roulette-container {
+  flex-grow: 1;
+  display: flex;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  position: relative;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.winner-announcement {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }

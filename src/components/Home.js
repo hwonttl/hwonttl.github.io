@@ -1,6 +1,5 @@
-// src/components/Home.js
 import React, { useState } from 'react';
-import Roulette from './Roulette';
+import Roulette from './Roulette.js';
 import './Home.css';
 
 const Home = ({ candidates }) => {
