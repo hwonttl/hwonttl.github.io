@@ -11,8 +11,8 @@ const Roulette = ({ candidates, onDraw }) => {
     const colors = [];
     for (let i = 0; i < numColors; i++) {
       const hue = ((i * 360) / numColors) % 360;
-      const saturation = 70 + Math.random() * 30; 
-      const lightness = 50 + Math.random() * 20; 
+      const saturation = 70 + Math.random() * 30;
+      const lightness = 50 + Math.random() * 20;
       colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
     }
     return colors;
@@ -157,13 +157,15 @@ const Roulette = ({ candidates, onDraw }) => {
 
     Composite.add(world, hole);
 
-      Events.on(engine, "collisionStart", (event) => {
+    Events.on(engine, "collisionStart", (event) => {
       event.pairs.forEach((pair) => {
         if (pair.bodyA.label === "hole" || pair.bodyB.label === "hole") {
           const winningBall =
             pair.bodyA.label === "hole" ? pair.bodyB : pair.bodyA;
           clearInterval(rotationForceInterval);
-          let winner = candidatesWithColors.find((candidate) => candidate.name === winningBall.label);
+          let winner = candidatesWithColors.find(
+            (candidate) => candidate.name === winningBall.label
+          );
           onDraw(winner);
         }
       });
@@ -176,8 +178,10 @@ const Roulette = ({ candidates, onDraw }) => {
         const randomMultiplier = Math.random();
         if (ball.position.y < pipeY - 230) {
           Body.applyForce(ball, ball.position, {
-            x: Math.cos(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
-            y: Math.sin(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
+            x:
+              Math.cos(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
+            y:
+              Math.sin(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
           });
         }
       });
@@ -239,7 +243,19 @@ const Roulette = ({ candidates, onDraw }) => {
   return (
     <div className="roulette-container">
       <div ref={scene} className="roulette-scene"></div>
+
       <div className="candidate-info">
+        <div className="roulette-buttons">
+          <button id="draw-button" className="draw-button">
+            Draw
+          </button>
+          <button id="up-button" className="up-button">
+            Up!
+          </button>
+          <button id="reset-button" className="reset-button">
+            Reset
+          </button>
+        </div>
         <h2>후보</h2>
         <ul>
           {candidates.map((candidate, index) => (
@@ -249,9 +265,9 @@ const Roulette = ({ candidates, onDraw }) => {
                 backgroundColor: colors[index],
                 color: "white",
                 fontWeight: "bold",
-                borderRadius: "8px", 
-                padding: "10px", 
-                margin: "5px 0", 
+                borderRadius: "8px",
+                padding: "10px",
+                margin: "5px 0",
               }}
             >
               {index + 1}. {candidate.name}
@@ -259,15 +275,6 @@ const Roulette = ({ candidates, onDraw }) => {
           ))}
         </ul>
       </div>
-      <button id="draw-button" className="draw-button">
-        Draw
-      </button>
-      <button id="up-button" className="up-button">
-        Up!
-      </button>
-      <button id="reset-button" className="reset-button">
-        Reset
-      </button>
     </div>
   );
 };
