@@ -16,9 +16,9 @@ export const defaultRestaurants = [
     recommendedDish: "삼겹살"
   },
   {
-    name: "이수양꼬치",
+    name: "호우양꼬치",
     menu: ["양꼬치", "꿔바로우"],
-    mapLink: "https://goo.gl/maps/kfr4N6dx6i1GfX4s7",
+    mapLink: "https://naver.me/FJH6nDfA",
     suitableFor: [3, 7],
     url: "",
     recommendedDish: "양꼬치"

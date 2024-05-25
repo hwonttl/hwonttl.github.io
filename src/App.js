@@ -45,7 +45,7 @@ const App = () => {
     }
   }, []);
 
-  const [winner, setWinner] = useState(null);
+  const [winner, setwinner] = useState(null);
 
   const handleOpenModal = () => {
     setSelectedRestaurant({ name: "", menu: "", mapLink: "", suitableFor: "", url: "" });
@@ -122,11 +122,13 @@ const App = () => {
         <Roulette candidates={candidates.filter(candidate => {
           const [min, max] = candidate.suitableFor;
           return suitablePeople === '' || (suitablePeople >= min && suitablePeople <= max);
-        })} onDraw={(winnerName) => setWinner(winnerName)} />
+        })} onDraw={(winner) => setwinner(winner)} />
         {winner && (
           <div className="winner-announcement">
-            <h2>Congratulations!</h2>
-            <p>{winner} has been selected!</p>
+            <h2>축하합니다!</h2>
+            <p>오늘 점심은 <span style={{fontWeight: 'bold'}}>{winner.name}</span> 입니다!</p>
+            <p onClick={() => window.open(winner.mapLink)}>{winner.mapLink}</p>
+            <button className="copy-map-link" onClick={() => navigator.clipboard.writeText(winner.mapLink)}>Copy Map Link</button>
           </div>
         )}
       </div>

@@ -93,3 +93,13 @@
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+.copy-map-link {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.open-map-link {
+  margin-left: 5px;
+  margin-right: 5px;
+}

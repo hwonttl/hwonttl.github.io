@@ -30,13 +30,12 @@ const Roulette = ({ candidates, onDraw }) => {
       Events = Matter.Events;
 
     const engine = Engine.create();
-    engine.constraintIterations = 500;
-    engine.positionIterations = 1500;
-    engine.gravity.y = 0.1;
+    engine.constraintIterations = 1000;
+    engine.positionIterations = 3000;
+    engine.gravity.y = 0.35;
 
     engineRef.current = engine;
     const world = engine.world;
-    
 
     let rotationForceInterval = null;
 
@@ -51,15 +50,13 @@ const Roulette = ({ candidates, onDraw }) => {
       },
     });
 
-    // Create hollow circular ball box
     let parts = [];
     partsRef.current = parts;
     const radius = 300; // Increase the radius for a larger circle
 
+    const minGakdo = 81;
+    const maxGakdo = 99;
 
-    const minGakdo = 83;
-    const maxGakdo = 97;
-    
     for (let i = 0; i < 360; i += 0.5) {
       const x = 400 + Math.cos((i * Math.PI) / 180) * radius;
       const y = 350 + Math.sin((i * Math.PI) / 180) * radius;
@@ -67,7 +64,7 @@ const Roulette = ({ candidates, onDraw }) => {
       const part = Bodies.rectangle(x, y, 10, 10, {
         isStatic: true,
         angle: (i * Math.PI) / 180,
-        restitution: 0.8,
+        restitution: 0.1,
         render: {
           fillStyle: i > minGakdo && i <= maxGakdo ? "#D3D3D3" : "#000",
         },
@@ -92,8 +89,7 @@ const Roulette = ({ candidates, onDraw }) => {
       number: index + 1,
     }));
 
-    // Add pipe to guide the ball to the hole
-    const pipeWidth = 80;
+    const pipeWidth = 100;
     const pipeHeight = 250;
     const pipeY = 900 - pipeHeight / 2;
 
@@ -128,14 +124,24 @@ const Roulette = ({ candidates, onDraw }) => {
       const radius = 100;
       const x = 400 + radius * Math.cos(angle);
       const y = 400 + radius * Math.sin(angle);
-      const ballRadius = 30;
+      const ballRadius = 40;
       return Bodies.circle(x, y, ballRadius, {
         label: candidate.name,
-        restitution: 0.8,
+        restitution: 1,
         render: {
           sprite: {
             texture: `data:image/svg+xml,${encodeURIComponent(
-              `<svg xmlns="http://www.w3.org/2000/svg" width="${ballRadius*2}" height="${ballRadius*2}"><circle cx="${ballRadius}" cy="${ballRadius}" r="${ballRadius}" fill="${candidate.color}"/><text x="${ballRadius}" y="${ballRadius*1.2}" font-size="${ballRadius*0.4}" fill="white" text-anchor="middle" font-family="Arial">${candidate.name}</text></svg>`
+              `<svg xmlns="http://www.w3.org/2000/svg" width="${
+                ballRadius * 2
+              }" height="${
+                ballRadius * 2
+              }"><circle cx="${ballRadius}" cy="${ballRadius}" r="${ballRadius}" fill="${
+                candidate.color
+              }"/><text x="${ballRadius}" y="${ballRadius * 1.2}" font-size="${
+                ballRadius * 0.4
+              }" fill="white" text-anchor="middle" font-family="Arial">${
+                candidate.name
+              }</text></svg>`
             )}`,
           },
         },
@@ -143,8 +149,6 @@ const Roulette = ({ candidates, onDraw }) => {
     });
 
     Composite.add(world, balls);
-
-    
 
     const runner = Runner.create();
     Runner.run(runner, engine);
@@ -159,14 +163,14 @@ const Roulette = ({ candidates, onDraw }) => {
 
     Composite.add(world, hole);
 
-    // Add collision event for determining the winner
-    Events.on(engine, "collisionStart", (event) => {
+      Events.on(engine, "collisionStart", (event) => {
       event.pairs.forEach((pair) => {
         if (pair.bodyA.label === "hole" || pair.bodyB.label === "hole") {
           const winningBall =
             pair.bodyA.label === "hole" ? pair.bodyB : pair.bodyA;
           clearInterval(rotationForceInterval);
-          onDraw(winningBall.label);
+          let winner = candidatesWithColors.find((candidate) => candidate.name === winningBall.label);
+          onDraw(winner);
         }
       });
     });
@@ -174,8 +178,8 @@ const Roulette = ({ candidates, onDraw }) => {
     const applyRotationalForce = () => {
       balls.forEach((ball) => {
         const angle = Math.atan2(ball.position.y - 400, ball.position.x - 400);
-        const forceMagnitude = 0.009 * ball.mass;
-        if(ball.position.y < pipeY-200){
+        const forceMagnitude = 0.01 * ball.mass;
+        if (ball.position.y < pipeY - 240) {
           Body.applyForce(ball, ball.position, {
             x: Math.cos(angle + Math.PI / 2) * forceMagnitude,
             y: Math.sin(angle + Math.PI / 2) * forceMagnitude,
@@ -183,7 +187,6 @@ const Roulette = ({ candidates, onDraw }) => {
         }
       });
     };
-
 
     const draw = () => {
       rotationForceInterval = setInterval(applyRotationalForce, 150);
@@ -200,13 +203,13 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const reset = () => {
       onDraw(null);
-    }
+    };
 
     const up = () => {
       balls.forEach((ball) => {
-        Body.applyForce(ball, ball.position, { x: 0, y: -0.05 });
-      }
-    )};
+        Body.applyForce(ball, ball.position, { x: 0, y: -0.2 });
+      });
+    };
 
     const drawButton = document.getElementById("draw-button");
     if (drawButton) {
@@ -240,14 +243,22 @@ const Roulette = ({ candidates, onDraw }) => {
 
   return (
     <div className="roulette-container">
-
       <div ref={scene} className="roulette-scene"></div>
       <div className="candidate-info">
         <h2>Candidate Information</h2>
         <ul>
           {candidates.map((candidate, index) => (
-            // style: { color: colors[index], fontWeight: "bold"}
-            <li key={index} style={{ color: colors[index], fontWeight: "bold" }}>
+            <li
+              key={index}
+              style={{
+                backgroundColor: colors[index],
+                color: "white",
+                fontWeight: "bold",
+                borderRadius: "8px", // 모서리를 둥글게
+                padding: "10px", // 내부 여백을 줘서 사각형을 더 명확하게
+                margin: "5px 0", // 리스트 아이템 간의 간격
+              }}
+            >
               {index + 1}. {candidate.name}
             </li>
           ))}
@@ -256,8 +267,12 @@ const Roulette = ({ candidates, onDraw }) => {
       <button id="draw-button" className="draw-button">
         Draw
       </button>
-      <button id="up-button" className="up-button">Up!</button>
-      <button id="reset-button" className="reset-button">Reset</button>
+      <button id="up-button" className="up-button">
+        Up!
+      </button>
+      <button id="reset-button" className="reset-button">
+        Reset
+      </button>
     </div>
   );
 };
