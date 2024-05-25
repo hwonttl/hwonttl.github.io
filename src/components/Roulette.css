@@ -45,9 +45,47 @@
     cursor: pointer;
     transition: background-color 0.3s;
     margin-top: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
   }
   
   .draw-button:hover {
     background-color: #0056b3;
+  }
+
+  .reset-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    background-color: #dc3545;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .reset-button:hover {
+    background-color: #a71d2a;
+  }
+
+  .up-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    background-color: #28a745;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .up-button:hover {
+    background-color: #218838;
   }
   

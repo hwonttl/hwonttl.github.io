@@ -121,7 +121,7 @@ const App = () => {
           {candidates.map((candidate, index) => (
             <li key={index} className="restaurant-item">
               <button className="restaurant-button" onClick={() => handleEditRestaurant(index)}>
-                {candidate.name} (Min: {candidate.suitableFor[0]}, Max: {candidate.suitableFor[1]})
+                {candidate.name} ({candidate.suitableFor[0]}~{candidate.suitableFor[1]}명)
               </button>
               <button className="remove-button" onClick={() => handleRemoveRestaurant(index)}>X</button>
             </li>
