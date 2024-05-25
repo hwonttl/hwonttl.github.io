@@ -11,8 +11,8 @@ const Roulette = ({ candidates, onDraw }) => {
     const colors = [];
     for (let i = 0; i < numColors; i++) {
       const hue = ((i * 360) / numColors) % 360;
-      const saturation = 70 + Math.random() * 30; // Saturation between 70% and 100%
-      const lightness = 50 + Math.random() * 20; // Lightness between 50% and 70%
+      const saturation = 70 + Math.random() * 30; 
+      const lightness = 50 + Math.random() * 20; 
       colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
     }
     return colors;
@@ -44,7 +44,7 @@ const Roulette = ({ candidates, onDraw }) => {
       engine: engine,
       options: {
         width: 800,
-        height: 1000,
+        height: 900,
         wireframes: false,
         background: "#fafafa",
       },
@@ -52,7 +52,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
     let parts = [];
     partsRef.current = parts;
-    const radius = 300; // Increase the radius for a larger circle
+    const radius = 300;
 
     const minGakdo = 81;
     const maxGakdo = 99;
@@ -75,13 +75,7 @@ const Roulette = ({ candidates, onDraw }) => {
     const multiflier = parts.length / 360;
     const removeRange = [minGakdo * multiflier, maxGakdo * multiflier];
 
-    // Create ground and walls to prevent balls from escaping
-    const ground = Bodies.rectangle(400, 890, 800, 20, { isStatic: true });
-    const ceiling = Bodies.rectangle(400, 10, 800, 20, { isStatic: true });
-    const leftWall = Bodies.rectangle(10, 400, 20, 1000, { isStatic: true });
-    const rightWall = Bodies.rectangle(790, 400, 20, 1000, { isStatic: true });
-
-    Composite.add(world, [...parts, ground, ceiling, leftWall, rightWall]);
+    Composite.add(world, [...parts]);
 
     const candidatesWithColors = candidates.map((candidate, index) => ({
       ...candidate,
@@ -179,7 +173,7 @@ const Roulette = ({ candidates, onDraw }) => {
       balls.forEach((ball) => {
         const angle = Math.atan2(ball.position.y - 400, ball.position.x - 400);
         const forceMagnitude = 0.02 * ball.mass;
-        const randomMultiplier = Math.random(); // 0.5 ~ 1.5 사이의 무작위 값
+        const randomMultiplier = Math.random();
         if (ball.position.y < pipeY - 230) {
           Body.applyForce(ball, ball.position, {
             x: Math.cos(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
@@ -255,9 +249,9 @@ const Roulette = ({ candidates, onDraw }) => {
                 backgroundColor: colors[index],
                 color: "white",
                 fontWeight: "bold",
-                borderRadius: "8px", // 모서리를 둥글게
-                padding: "10px", // 내부 여백을 줘서 사각형을 더 명확하게
-                margin: "5px 0", // 리스트 아이템 간의 간격
+                borderRadius: "8px", 
+                padding: "10px", 
+                margin: "5px 0", 
               }}
             >
               {index + 1}. {candidate.name}

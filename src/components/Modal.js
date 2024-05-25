@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Modal.css";
 
-const Modal = ({ isOpen, onClose, onSubmit, restaurant, setRestaurant }) => {
+const Modal = ({ isOpen, onClose, onSubmit, restaurant }) => {
   const [localRestaurant, setLocalRestaurant] = useState({ ...restaurant });
 
   useEffect(() => {
