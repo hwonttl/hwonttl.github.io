@@ -178,11 +178,12 @@ const Roulette = ({ candidates, onDraw }) => {
     const applyRotationalForce = () => {
       balls.forEach((ball) => {
         const angle = Math.atan2(ball.position.y - 400, ball.position.x - 400);
-        const forceMagnitude = 0.01 * ball.mass;
-        if (ball.position.y < pipeY - 240) {
+        const forceMagnitude = 0.02 * ball.mass;
+        const randomMultiplier = Math.random(); // 0.5 ~ 1.5 사이의 무작위 값
+        if (ball.position.y < pipeY - 230) {
           Body.applyForce(ball, ball.position, {
-            x: Math.cos(angle + Math.PI / 2) * forceMagnitude,
-            y: Math.sin(angle + Math.PI / 2) * forceMagnitude,
+            x: Math.cos(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
+            y: Math.sin(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
           });
         }
       });
