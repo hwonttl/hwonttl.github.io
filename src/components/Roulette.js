@@ -32,9 +32,11 @@ const Roulette = ({ candidates, onDraw }) => {
     const engine = Engine.create();
     engine.constraintIterations = 500;
     engine.positionIterations = 1500;
+    engine.gravity.y = 0.1;
 
     engineRef.current = engine;
     const world = engine.world;
+    
 
     let rotationForceInterval = null;
 
@@ -52,21 +54,20 @@ const Roulette = ({ candidates, onDraw }) => {
     // Create hollow circular ball box
     let parts = [];
     partsRef.current = parts;
-    const radius = 350; // Increase the radius for a larger circle
+    const radius = 300; // Increase the radius for a larger circle
 
 
-    const minGakdo = 85;
-    const maxGakdo = 95;
+    const minGakdo = 83;
+    const maxGakdo = 97;
     
-
     for (let i = 0; i < 360; i += 0.5) {
       const x = 400 + Math.cos((i * Math.PI) / 180) * radius;
-      const y = 400 + Math.sin((i * Math.PI) / 180) * radius;
+      const y = 350 + Math.sin((i * Math.PI) / 180) * radius;
 
       const part = Bodies.rectangle(x, y, 10, 10, {
         isStatic: true,
         angle: (i * Math.PI) / 180,
-        restitution: 0.95,
+        restitution: 0.8,
         render: {
           fillStyle: i > minGakdo && i <= maxGakdo ? "#D3D3D3" : "#000",
         },
@@ -91,31 +92,10 @@ const Roulette = ({ candidates, onDraw }) => {
       number: index + 1,
     }));
 
-    // Create balls for each candidate inside the ball box
-    const balls = candidatesWithColors.map((candidate) => {
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 100; // Ensure balls are inside the ball box
-      const x = 400 + radius * Math.cos(angle);
-      const y = 400 + radius * Math.sin(angle);
-      return Bodies.circle(x, y, 20, {
-        label: candidate.name,
-        restitution: 0.95,
-        render: {
-          sprite: {
-            texture: `data:image/svg+xml,${encodeURIComponent(
-              `<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><circle cx="20" cy="20" r="20" fill="${candidate.color}"/><text x="20" y="25" font-size="20" fill="white" text-anchor="middle" font-family="Arial">${candidate.number}</text></svg>`
-            )}`,
-          },
-        },
-      });
-    });
-
-    Composite.add(world, balls);
-
     // Add pipe to guide the ball to the hole
-    const pipeWidth = 70;
-    const pipeHeight = 120;
-    const pipeY = 870 - pipeHeight / 2;
+    const pipeWidth = 80;
+    const pipeHeight = 250;
+    const pipeY = 900 - pipeHeight / 2;
 
     const pipeLeft = Bodies.rectangle(
       400 - pipeWidth / 2,
@@ -123,6 +103,7 @@ const Roulette = ({ candidates, onDraw }) => {
       10,
       pipeHeight,
       {
+        restitution: 0.1,
         isStatic: true,
         render: { fillStyle: "black" },
       }
@@ -134,6 +115,7 @@ const Roulette = ({ candidates, onDraw }) => {
       10,
       pipeHeight,
       {
+        restitution: 0.1,
         isStatic: true,
         render: { fillStyle: "black" },
       }
@@ -141,11 +123,34 @@ const Roulette = ({ candidates, onDraw }) => {
 
     Composite.add(world, [pipeLeft, pipeRight]);
 
+    const balls = candidatesWithColors.map((candidate) => {
+      const angle = Math.random() * Math.PI * 2;
+      const radius = 100;
+      const x = 400 + radius * Math.cos(angle);
+      const y = 400 + radius * Math.sin(angle);
+      const ballRadius = 30;
+      return Bodies.circle(x, y, ballRadius, {
+        label: candidate.name,
+        restitution: 0.8,
+        render: {
+          sprite: {
+            texture: `data:image/svg+xml,${encodeURIComponent(
+              `<svg xmlns="http://www.w3.org/2000/svg" width="${ballRadius*2}" height="${ballRadius*2}"><circle cx="${ballRadius}" cy="${ballRadius}" r="${ballRadius}" fill="${candidate.color}"/><text x="${ballRadius}" y="${ballRadius*1.2}" font-size="${ballRadius*0.4}" fill="white" text-anchor="middle" font-family="Arial">${candidate.name}</text></svg>`
+            )}`,
+          },
+        },
+      });
+    });
+
+    Composite.add(world, balls);
+
+    
+
     const runner = Runner.create();
     Runner.run(runner, engine);
     Render.run(render);
 
-    const hole = Bodies.rectangle(400, 870, 80, 20, {
+    const hole = Bodies.rectangle(400, 870, 90, 20, {
       isStatic: true,
       isSensor: true,
       label: "hole",
@@ -169,17 +174,19 @@ const Roulette = ({ candidates, onDraw }) => {
     const applyRotationalForce = () => {
       balls.forEach((ball) => {
         const angle = Math.atan2(ball.position.y - 400, ball.position.x - 400);
-        const forceMagnitude = 0.01 * ball.mass;
-        Body.applyForce(ball, ball.position, {
-          x: Math.cos(angle + Math.PI / 2) * forceMagnitude,
-          y: Math.sin(angle + Math.PI / 2) * forceMagnitude,
-        });
+        const forceMagnitude = 0.009 * ball.mass;
+        if(ball.position.y < pipeY-200){
+          Body.applyForce(ball, ball.position, {
+            x: Math.cos(angle + Math.PI / 2) * forceMagnitude,
+            y: Math.sin(angle + Math.PI / 2) * forceMagnitude,
+          });
+        }
       });
     };
 
 
     const draw = () => {
-      rotationForceInterval = setInterval(applyRotationalForce, 100);
+      rotationForceInterval = setInterval(applyRotationalForce, 150);
 
       up();
       setTimeout(() => {
@@ -197,7 +204,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const up = () => {
       balls.forEach((ball) => {
-        Body.applyForce(ball, ball.position, { x: 0, y: -0.03 });
+        Body.applyForce(ball, ball.position, { x: 0, y: -0.05 });
       }
     )};
 
@@ -233,17 +240,14 @@ const Roulette = ({ candidates, onDraw }) => {
 
   return (
     <div className="roulette-container">
-      {/* {countdownMs > 0 && (
-        <div className="countdown-announcement">
-          <span>{countdownMs / 1000}</span>
-        </div>
-      )} */}
+
       <div ref={scene} className="roulette-scene"></div>
       <div className="candidate-info">
         <h2>Candidate Information</h2>
         <ul>
           {candidates.map((candidate, index) => (
-            <li key={index} style={{ color: colors[index] }}>
+            // style: { color: colors[index], fontWeight: "bold"}
+            <li key={index} style={{ color: colors[index], fontWeight: "bold" }}>
               {index + 1}. {candidate.name}
             </li>
           ))}

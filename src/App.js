@@ -1,22 +1,20 @@
-// src/App.js
 import React, { useState, useEffect } from "react";
 import Roulette from "./components/Roulette.js";
 import Modal from "./components/Modal";
 import {defaultRestaurants} from "./data/restaurants";
+
 import "./App.css";
 
 const utf8ToBase64 = (str) => {
   return window.btoa(unescape(encodeURIComponent(str)))
     .replace(/\+/g, '-')
     .replace(/\//g, '_')
-    .replace(/=+$/, '');
 };
 
 const base64ToUtf8 = (str) => {
   str = str
     .replace(/-/g, '+')
     .replace(/_/g, '/')
-    .padEnd(str.length + (str.length % 4), '=');
   return decodeURIComponent(escape(window.atob(str)));
 };
 
@@ -48,25 +46,6 @@ const App = () => {
   }, []);
 
   const [winner, setWinner] = useState(null);
-
-  const handleDraw = () => {
-    let suitableCandidates;
-    if (suitablePeople) {
-      suitableCandidates = candidates.filter(candidate => {
-        const [min, max] = candidate.suitableFor;
-        return suitablePeople >= min && suitablePeople <= max;
-      });
-    } else {
-      suitableCandidates = candidates;
-    }
-
-    if (suitableCandidates.length > 0) {
-      setWinner(null);
-      // 룰렛 컴포넌트에 필터링된 후보 전달
-    } else {
-      alert('No suitable restaurants found for the given number of people.');
-    }
-  };
 
   const handleOpenModal = () => {
     setSelectedRestaurant({ name: "", menu: "", mapLink: "", suitableFor: "", url: "" });
@@ -129,14 +108,14 @@ const App = () => {
         </ul>
         <div>
           <label>
-            Suitable People:
+            몇 명이 먹기 적합한 식당을 찾으시나요?
+            <br/>(입력하지 않으면 모든 식당이 대상입니다):
             <input
               type="number"
               value={suitablePeople}
               onChange={(e) => setSuitablePeople(parseInt(e.target.value, 10) || '')}
             />
           </label>
-          <button onClick={handleDraw}>Draw</button>
         </div>
       </div>
       <div className="roulette-container">
