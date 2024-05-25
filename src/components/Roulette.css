@@ -1,0 +1,53 @@
+/* src/components/Roulette.css */
+.roulette-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  .roulette-scene {
+    width: 800px;
+    height: 600px;
+    background-color: #fafafa;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 20px;
+    position: relative;
+  }
+  
+  .candidate-info {
+    width: 200px;
+  }
+  
+  .candidate-info h2 {
+    margin-bottom: 10px;
+  }
+  
+  .candidate-info ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .candidate-info li {
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  .draw-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+  }
+  
+  .draw-button:hover {
+    background-color: #0056b3;
+  }
+  
