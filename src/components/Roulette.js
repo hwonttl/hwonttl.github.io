@@ -158,6 +158,7 @@ const Roulette = ({ candidates, onDraw }) => {
     Composite.add(world, hole);
 
     Events.on(engine, "collisionStart", (event) => {
+      
       event.pairs.forEach((pair) => {
         if (pair.bodyA.label === "hole" || pair.bodyB.label === "hole") {
           const winningBall =
@@ -171,12 +172,44 @@ const Roulette = ({ candidates, onDraw }) => {
       });
     });
 
+    Events.on(engine, 'beforeUpdate', (event) => {
+      let isBallNearbyHole = false;
+
+      balls.forEach((ball) => {
+        if (ball.position.y > pipeY - 100) {
+          isBallNearbyHole = true;
+        }
+      });
+
+      if (isBallNearbyHole) {
+        if (engine.timing.timeScale === 1.0) {
+          engine.timing.timeScale = 0.2;
+
+          // 카메라 줌 인
+          Render.lookAt(render, {
+            min: { x: 200, y: 400 },
+            max: { x: 600, y: 900 }
+          });
+        }
+      } else {
+        if (engine.timing.timeScale !== 1.0) {
+          engine.timing.timeScale = 1.0;
+          
+          // 카메라 줌 아웃
+          Render.lookAt(render, {
+            min: { x: 0, y: 0 },
+            max: { x: 800, y: 900 }
+          });
+        }
+      }
+    });
+
     const applyRotationalForce = () => {
       balls.forEach((ball) => {
         const angle = Math.atan2(ball.position.y - 400, ball.position.x - 400);
         const forceMagnitude = 0.02 * ball.mass;
         const randomMultiplier = Math.random();
-        if (ball.position.y < pipeY - 230) {
+        if (ball.position.y < pipeY) {
           Body.applyForce(ball, ball.position, {
             x:
               Math.cos(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
