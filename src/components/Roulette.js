@@ -1,11 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import Matter from "matter-js";
 import "./Roulette.css";
+import { getGaussianRandomValue } from "../utils/MathUtil";
 
 const Roulette = ({ candidates, onDraw }) => {
   const scene = useRef();
   const engineRef = useRef(null);
   const partsRef = useRef();
+
+  const WALL_RESTITUTION = 0.2;
 
   const generateColors = (numColors) => {
     const colors = [];
@@ -32,12 +35,14 @@ const Roulette = ({ candidates, onDraw }) => {
     const engine = Engine.create();
     engine.constraintIterations = 1000;
     engine.positionIterations = 3000;
-    engine.gravity.y = 0.35;
+    engine.gravity.y = 0.25;
 
     engineRef.current = engine;
     const world = engine.world;
 
     let rotationForceInterval = null;
+    const upForceIntervalCount = getGaussianRandomValue();
+    let upForceIntervalCurrentCount = 0;
 
     const render = Render.create({
       element: scene.current,
@@ -54,8 +59,8 @@ const Roulette = ({ candidates, onDraw }) => {
     partsRef.current = parts;
     const radius = 300;
 
-    const minGakdo = 81;
-    const maxGakdo = 99;
+    const minGakdo = 80;
+    const maxGakdo = 100;
 
     for (let i = 0; i < 360; i += 0.5) {
       const x = 400 + Math.cos((i * Math.PI) / 180) * radius;
@@ -64,7 +69,7 @@ const Roulette = ({ candidates, onDraw }) => {
       const part = Bodies.rectangle(x, y, 10, 10, {
         isStatic: true,
         angle: (i * Math.PI) / 180,
-        restitution: 0.1,
+        restitution: WALL_RESTITUTION,
         render: {
           fillStyle: i > minGakdo && i <= maxGakdo ? "#D3D3D3" : "#000",
         },
@@ -83,7 +88,7 @@ const Roulette = ({ candidates, onDraw }) => {
       number: index + 1,
     }));
 
-    const pipeWidth = 100;
+    const pipeWidth = 110;
     const pipeHeight = 250;
     const pipeY = 900 - pipeHeight / 2;
 
@@ -93,7 +98,7 @@ const Roulette = ({ candidates, onDraw }) => {
       10,
       pipeHeight,
       {
-        restitution: 0.1,
+        restitution: 0,
         isStatic: true,
         render: { fillStyle: "black" },
       }
@@ -148,7 +153,7 @@ const Roulette = ({ candidates, onDraw }) => {
     Runner.run(runner, engine);
     Render.run(render);
 
-    const hole = Bodies.rectangle(400, 890, 90, 20, {
+    const hole = Bodies.rectangle(400, 890, 100, 20, {
       isStatic: true,
       isSensor: true,
       label: "hole",
@@ -183,7 +188,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
       if (isBallNearbyHole) {
         if (engine.timing.timeScale === 1.0) {
-          engine.timing.timeScale = 0.2;
+          engine.timing.timeScale = 0.8;
 
           // 카메라 줌 인
           Render.lookAt(render, {
@@ -204,6 +209,8 @@ const Roulette = ({ candidates, onDraw }) => {
       }
     });
 
+    let continuouslyReduceForceMultiplier = 1;
+    const reduceForceValue = 0.0001;
     const applyRotationalForce = () => {
       balls.forEach((ball) => {
         const angle = Math.atan2(ball.position.y - 400, ball.position.x - 400);
@@ -212,34 +219,48 @@ const Roulette = ({ candidates, onDraw }) => {
         if (ball.position.y < pipeY) {
           Body.applyForce(ball, ball.position, {
             x:
-              Math.cos(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
+              Math.cos(angle + Math.PI / 2) * forceMagnitude * randomMultiplier * continuouslyReduceForceMultiplier,
             y:
-              Math.sin(angle + Math.PI / 2) * forceMagnitude * randomMultiplier,
+              Math.sin(angle + Math.PI / 2) * forceMagnitude * randomMultiplier * continuouslyReduceForceMultiplier,
           });
         }
       });
+      continuouslyReduceForceMultiplier -= reduceForceValue;
     };
 
-    const draw = () => {
-      rotationForceInterval = setInterval(applyRotationalForce, 150);
+    const dynamicAutoUpInterval = () => {
+      upForceIntervalCurrentCount++;
+      up(0.5);
+    
+      if (upForceIntervalCurrentCount <= upForceIntervalCount) {
+        // 다음 인터벌을 조금씩 증가시킵니다.
+        let interval = 3000 + Math.floor(Math.random() * 5001);
+        setTimeout(dynamicAutoUpInterval, interval);
+      } else {
+        console.log('Interval cleared');
+      }
+    }
 
-      up();
-      setTimeout(() => {
+    const draw = () => {
+      //rotationForceInterval = setInterval(applyRotationalForce, 150);
+      dynamicAutoUpInterval();
+
+      // setTimeout(() => {
         for (let i = 0; i < parts.length; i++) {
-          if (i >= removeRange[0] && i <= removeRange[1]) {
+          if (i > removeRange[0] && i <= removeRange[1]) {
             Composite.remove(world, parts[i]);
           }
         }
-      }, 3000);
+      // }, 3000);
     };
 
     const reset = () => {
       onDraw(null);
     };
 
-    const up = () => {
+    const up = (force) => {
       balls.forEach((ball) => {
-        Body.applyForce(ball, ball.position, { x: 0, y: -0.2 });
+        Body.applyForce(ball, ball.position, { x: 0, y: -1*force });
       });
     };
 
@@ -255,7 +276,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const upButton = document.getElementById("up-button");
     if (upButton) {
-      upButton.addEventListener("click", up);
+      upButton.addEventListener("click", () => up(0.3));
     }
 
     return () => {
