@@ -35,7 +35,7 @@ const Roulette = ({ candidates, onDraw }) => {
     const engine = Engine.create();
     engine.constraintIterations = 1000;
     engine.positionIterations = 3000;
-    engine.gravity.y = 0.5;
+    engine.gravity.y = 0.8;
 
     engineRef.current = engine;
     const world = engine.world;
@@ -150,7 +150,12 @@ const Roulette = ({ candidates, onDraw }) => {
 
     Composite.add(world, balls);
 
-    const runner = Runner.create();
+    const runner = Runner.create({
+      isFixed: true,      // 고정된 시간 간격 사용
+      delta: 1000 / 60,  // 120Hz로 설정 (1000ms / 120 = 8.33ms)
+      fps: 30,           // 목표 프레임 속도
+      deltaMax: 1000 / 60 // 최대 delta 시간 (60Hz에 해당)
+  });
     Runner.run(runner, engine);
     Render.run(render);
 
