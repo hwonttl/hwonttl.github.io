@@ -312,7 +312,7 @@ const Roulette = ({ candidates, onDraw }) => {
           <button id="draw-button" className="draw-button">
             Draw
           </button>
-          <button id="up-button" className="up-button">
+          <button id="up-button" className="up-button" style={{display: "none"}}>
             Up!
           </button>
           
