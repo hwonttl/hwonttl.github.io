@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Roulette from "./components/Roulette.js";
 import Modal from "./components/Modal";
 import {defaultRestaurants} from "./data/restaurants";
-import {base64ToUtf8, utf8ToBase64} from "./utils/base64";
+import {base64ToUtf8, utf8ToBase64} from "./utils/StringUtil";
 
 import "./App.css";
 
