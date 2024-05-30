@@ -33,9 +33,9 @@ const Roulette = ({ candidates, onDraw }) => {
       Events = Matter.Events;
 
     const engine = Engine.create();
-    engine.constraintIterations = 1000;
-    engine.positionIterations = 3000;
-    engine.gravity.y = 0.8;
+    engine.constraintIterations = 3000;
+    engine.positionIterations = 9000;
+    engine.gravity.y = 0.7;
 
     engineRef.current = engine;
     const world = engine.world;
@@ -118,15 +118,17 @@ const Roulette = ({ candidates, onDraw }) => {
 
     Composite.add(world, [pipeLeft, pipeRight]);
 
+    let ballInitialY = 400;
     const balls = candidatesWithColors.map((candidate) => {
       const angle = Math.random() * Math.PI * 2;
       const radius = 100;
       const x = 400 + radius * Math.cos(angle);
-      const y = 400 + radius * Math.sin(angle);
+      const y = ballInitialY + radius * Math.sin(angle);
+      ballInitialY -= 10;
       const ballRadius = 40;
       return Bodies.circle(x, y, ballRadius, {
         label: candidate.name,
-        restitution: 0.3,
+        restitution: 0,
         friction: 0,
         render: {
           sprite: {
@@ -152,9 +154,9 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const runner = Runner.create({
       isFixed: true,      // 고정된 시간 간격 사용
-      delta: 1000 / 60,  // 120Hz로 설정 (1000ms / 120 = 8.33ms)
-      fps: 30,           // 목표 프레임 속도
-      deltaMax: 1000 / 60 // 최대 delta 시간 (60Hz에 해당)
+      delta: 1000 / 90,  // 120Hz로 설정 (1000ms / 120 = 8.33ms)
+      fps: 60,           // 목표 프레임 속도
+      deltaMax: 1000 / 90 // 최대 delta 시간 (60Hz에 해당)
   });
     Runner.run(runner, engine);
     Render.run(render);
@@ -247,16 +249,18 @@ const Roulette = ({ candidates, onDraw }) => {
     }
 
     const draw = () => {
-      //rotationForceInterval = setInterval(applyRotationalForce, 150);
-      dynamicAutoUpInterval();
+      rotationForceInterval = setInterval(applyRotationalForce, 150);
+      //dynamicAutoUpInterval();
 
-      // setTimeout(() => {
+      up(0.1);
+
+      setTimeout(() => {
         for (let i = 0; i < parts.length; i++) {
           if (i > removeRange[0] && i <= removeRange[1]) {
             Composite.remove(world, parts[i]);
           }
         }
-      // }, 3000);
+      }, 3000+Math.floor(Math.random()*5000));
     };
 
     const reset = () => {
@@ -281,7 +285,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const upButton = document.getElementById("up-button");
     if (upButton) {
-      upButton.addEventListener("click", () => up(0.25));
+      upButton.addEventListener("click", () => up(0.3));
     }
 
     return () => {
@@ -311,9 +315,7 @@ const Roulette = ({ candidates, onDraw }) => {
           <button id="up-button" className="up-button">
             Up!
           </button>
-          <button id="reset-button" className="reset-button">
-            Reset
-          </button>
+          
         </div>
         <h2>후보</h2>
         <ul>

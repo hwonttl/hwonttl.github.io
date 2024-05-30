@@ -129,6 +129,9 @@ const App = () => {
             <p>오늘 점심은 <span style={{fontWeight: 'bold'}}>{winner.name}</span> 입니다!</p>
             {winner.mapLink && <p onClick={() => window.open(winner.mapLink)}>{winner.mapLink}</p>}
             {winner.mapLink && <button className="copy-map-link" onClick={() => navigator.clipboard.writeText(winner.mapLink)}>Copy Map Link</button>}
+            <button id="reset-button" className="reset-button">
+              Reset
+            </button>
           </div>
         )}
       </div>
