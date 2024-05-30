@@ -33,8 +33,8 @@ const Roulette = ({ candidates, onDraw }) => {
       Events = Matter.Events;
 
     const engine = Engine.create();
-    engine.constraintIterations = 2000;
-    engine.positionIterations = 6000;
+    engine.constraintIterations = 1000;
+    engine.positionIterations = 3000;
     engine.gravity.y = 0.5;
 
     engineRef.current = engine;
@@ -127,6 +127,7 @@ const Roulette = ({ candidates, onDraw }) => {
       return Bodies.circle(x, y, ballRadius, {
         label: candidate.name,
         restitution: 0.3,
+        friction: 0,
         render: {
           sprite: {
             texture: `data:image/svg+xml,${encodeURIComponent(
@@ -188,7 +189,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
       if (isBallNearbyHole) {
         if (engine.timing.timeScale === 1.0) {
-          engine.timing.timeScale = 0.5;
+          engine.timing.timeScale = 0.2;
 
           // 카메라 줌 인
           Render.lookAt(render, {
@@ -233,8 +234,7 @@ const Roulette = ({ candidates, onDraw }) => {
       up(0.25);
     
       if (upForceIntervalCurrentCount <= upForceIntervalCount) {
-        // 다음 인터벌을 조금씩 증가시킵니다.
-        let interval = 3000 + Math.floor(Math.random() * 5001);
+        let interval = 3000 + Math.floor(Math.random() * 4001);
         setTimeout(dynamicAutoUpInterval, interval);
       } else {
         console.log('Interval cleared');
@@ -276,7 +276,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const upButton = document.getElementById("up-button");
     if (upButton) {
-      upButton.addEventListener("click", () => up(0.3));
+      upButton.addEventListener("click", () => up(0.25));
     }
 
     return () => {
