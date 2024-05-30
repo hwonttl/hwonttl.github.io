@@ -175,7 +175,7 @@ export const defaultRestaurants = [
     category: "칼국수",
     menu: ["칼국수", "수제비", "김치전"],
     mapLink: "https://naver.me/5fjpy0Yf",
-    suitableFor: [1, 6],
+    suitableFor: [2, 12],
     url: "",
     recommendedDish: "칼국수"
   },
@@ -184,7 +184,7 @@ export const defaultRestaurants = [
     category: "한식",
     menu: ["솥밥", "불고기", "된장찌개"],
     mapLink: "https://naver.me/xhKzuGpz",
-    suitableFor: [2, 8],
+    suitableFor: [2, 16],
     url: "",
     recommendedDish: "솥밥"
   },
