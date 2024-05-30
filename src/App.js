@@ -51,7 +51,7 @@ const App = () => {
   };
 
   const handleReadme = () => {
-    window.open("https://https://github.com/hwonttl/hwonttl.github.io");
+    window.open("https://github.com/hwonttl/hwonttl.github.io");
   }
 
   const handleAddRestaurant = (restaurant) => {
@@ -89,8 +89,10 @@ const App = () => {
     <div className="App">
       <div className="control-panel">
         <h1>Lunch Roulette</h1>
-        <button className="add-button" onClick={handleOpenModal}>식당 추가</button>
-        <button className="readme-button" onClick={handleReadme}>식당 추가</button>
+        <div className="button-container">
+          <button className="add-button" onClick={handleOpenModal}>식당 추가</button>
+          <button className="readme-button" onClick={handleReadme}>사용법</button>
+        </div>
         <ul>
           {candidates.map((candidate, index) => (
             <li key={index} className="restaurant-item">
