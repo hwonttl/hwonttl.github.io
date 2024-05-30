@@ -2,21 +2,11 @@ import React, { useState, useEffect } from "react";
 import Roulette from "./components/Roulette.js";
 import Modal from "./components/Modal";
 import {defaultRestaurants} from "./data/restaurants";
+import {base64ToUtf8, utf8ToBase64} from "./utils/base64";
 
 import "./App.css";
 
-const utf8ToBase64 = (str) => {
-  return window.btoa(unescape(encodeURIComponent(str)))
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-};
 
-const base64ToUtf8 = (str) => {
-  str = str
-    .replace(/-/g, '+')
-    .replace(/_/g, '/')
-  return decodeURIComponent(escape(window.atob(str)));
-};
 
 const App = () => {
   const [candidates, setCandidates] = useState([]);
@@ -60,6 +50,10 @@ const App = () => {
     setEditingIndex(null);
   };
 
+  const handleReadme = () => {
+    window.open("https://https://github.com/hwonttl/hwonttl.github.io");
+  }
+
   const handleAddRestaurant = (restaurant) => {
     if (isEditing && editingIndex !== null) {
       const updatedCandidates = [...candidates];
@@ -96,6 +90,7 @@ const App = () => {
       <div className="control-panel">
         <h1>Lunch Roulette</h1>
         <button className="add-button" onClick={handleOpenModal}>식당 추가</button>
+        <button className="readme-button" onClick={handleReadme}>식당 추가</button>
         <ul>
           {candidates.map((candidate, index) => (
             <li key={index} className="restaurant-item">

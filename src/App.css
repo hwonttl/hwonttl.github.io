@@ -73,6 +73,19 @@
   background-color: #0056b3;
 }
 
+.readme-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+.readme-button:hover {
+  background-color: #218838;
+}
+
 .control-panel ul li .remove-button {
   background: none;
   border: none;
