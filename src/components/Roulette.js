@@ -35,7 +35,7 @@ const Roulette = ({ candidates, onDraw }) => {
     const engine = Engine.create();
     engine.constraintIterations = 3000;
     engine.positionIterations = 9000;
-    engine.gravity.y = 0.7;
+    engine.gravity.y = 1;
 
     engineRef.current = engine;
     const world = engine.world;
@@ -124,7 +124,7 @@ const Roulette = ({ candidates, onDraw }) => {
       const radius = 100;
       const x = 400 + radius * Math.cos(angle);
       const y = ballInitialY + radius * Math.sin(angle);
-      ballInitialY -= 10;
+      ballInitialY -= 5;
       const ballRadius = 40;
       return Bodies.circle(x, y, ballRadius, {
         label: candidate.name,
@@ -154,9 +154,9 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const runner = Runner.create({
       isFixed: true,      // 고정된 시간 간격 사용
-      delta: 1000 / 90,  // 120Hz로 설정 (1000ms / 120 = 8.33ms)
+      delta: 1000 / 120,  // 120Hz로 설정 (1000ms / 120 = 8.33ms)
       fps: 60,           // 목표 프레임 속도
-      deltaMax: 1000 / 90 // 최대 delta 시간 (60Hz에 해당)
+      deltaMax: 1000 / 120 // 최대 delta 시간 (60Hz에 해당)
   });
     Runner.run(runner, engine);
     Render.run(render);
@@ -222,7 +222,7 @@ const Roulette = ({ candidates, onDraw }) => {
     const applyRotationalForce = () => {
       balls.forEach((ball) => {
         const angle = Math.atan2(ball.position.y - 400, ball.position.x - 400);
-        const forceMagnitude = 0.02 * ball.mass;
+        const forceMagnitude = 0.025 * ball.mass;
         const randomMultiplier = Math.random();
         if (ball.position.y < pipeY) {
           Body.applyForce(ball, ball.position, {
@@ -238,7 +238,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const dynamicAutoUpInterval = () => {
       upForceIntervalCurrentCount++;
-      up(0.25);
+      up(0.5);
     
       if (upForceIntervalCurrentCount <= upForceIntervalCount) {
         let interval = 3000 + Math.floor(Math.random() * 4001);
@@ -250,9 +250,9 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const draw = () => {
       rotationForceInterval = setInterval(applyRotationalForce, 150);
-      //dynamicAutoUpInterval();
+      dynamicAutoUpInterval();
 
-      up(0.1);
+      up(0.5);
 
       setTimeout(() => {
         for (let i = 0; i < parts.length; i++) {
@@ -260,7 +260,7 @@ const Roulette = ({ candidates, onDraw }) => {
             Composite.remove(world, parts[i]);
           }
         }
-      }, 3000+Math.floor(Math.random()*5000));
+      }, 3000+Math.floor(Math.random()*7000));
     };
 
     const reset = () => {
