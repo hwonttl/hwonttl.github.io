@@ -125,7 +125,7 @@ const Roulette = ({ candidates, onDraw }) => {
       const x = 400 + radius * Math.cos(angle);
       const y = ballInitialY + radius * Math.sin(angle);
       ballInitialY -= 5;
-      const ballRadius = 40;
+      const ballRadius = 35;
       return Bodies.circle(x, y, ballRadius, {
         label: candidate.name,
         restitution: 0,
@@ -140,7 +140,7 @@ const Roulette = ({ candidates, onDraw }) => {
               }"><circle cx="${ballRadius}" cy="${ballRadius}" r="${ballRadius}" fill="${
                 candidate.color
               }"/><text x="${ballRadius}" y="${ballRadius * 1.2}" font-size="${
-                ballRadius * 0.4
+                ballRadius * 0.35
               }" fill="white" text-anchor="middle" font-family="Arial">${
                 candidate.name
               }</text></svg>`
@@ -222,7 +222,7 @@ const Roulette = ({ candidates, onDraw }) => {
     const applyRotationalForce = () => {
       balls.forEach((ball) => {
         const angle = Math.atan2(ball.position.y - 400, ball.position.x - 400);
-        const forceMagnitude = 0.025 * ball.mass;
+        const forceMagnitude = 0.02 * ball.mass;
         const randomMultiplier = Math.random();
         if (ball.position.y < pipeY) {
           Body.applyForce(ball, ball.position, {
@@ -241,7 +241,7 @@ const Roulette = ({ candidates, onDraw }) => {
       up(0.5);
     
       if (upForceIntervalCurrentCount <= upForceIntervalCount) {
-        let interval = 3000 + Math.floor(Math.random() * 4001);
+        let interval = 3000 + Math.floor(Math.random() * 3001);
         setTimeout(dynamicAutoUpInterval, interval);
       } else {
         console.log('Interval cleared');
@@ -249,10 +249,10 @@ const Roulette = ({ candidates, onDraw }) => {
     }
 
     const draw = () => {
-      rotationForceInterval = setInterval(applyRotationalForce, 150);
+      rotationForceInterval = setInterval(applyRotationalForce, 10);
       dynamicAutoUpInterval();
 
-      up(0.5);
+      up(0.2);
 
       setTimeout(() => {
         for (let i = 0; i < parts.length; i++) {
@@ -260,7 +260,7 @@ const Roulette = ({ candidates, onDraw }) => {
             Composite.remove(world, parts[i]);
           }
         }
-      }, 3000+Math.floor(Math.random()*7000));
+      }, 5000+Math.floor(Math.random()*7000));
     };
 
     const reset = () => {
