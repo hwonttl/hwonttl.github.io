@@ -33,9 +33,9 @@ const Roulette = ({ candidates, onDraw }) => {
       Events = Matter.Events;
 
     const engine = Engine.create();
-    engine.constraintIterations = 1000;
-    engine.positionIterations = 3000;
-    engine.gravity.y = 0.25;
+    engine.constraintIterations = 2000;
+    engine.positionIterations = 6000;
+    engine.gravity.y = 0.5;
 
     engineRef.current = engine;
     const world = engine.world;
@@ -126,7 +126,7 @@ const Roulette = ({ candidates, onDraw }) => {
       const ballRadius = 40;
       return Bodies.circle(x, y, ballRadius, {
         label: candidate.name,
-        restitution: 1,
+        restitution: 0.3,
         render: {
           sprite: {
             texture: `data:image/svg+xml,${encodeURIComponent(
@@ -188,7 +188,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
       if (isBallNearbyHole) {
         if (engine.timing.timeScale === 1.0) {
-          engine.timing.timeScale = 0.8;
+          engine.timing.timeScale = 0.5;
 
           // 카메라 줌 인
           Render.lookAt(render, {
@@ -230,7 +230,7 @@ const Roulette = ({ candidates, onDraw }) => {
 
     const dynamicAutoUpInterval = () => {
       upForceIntervalCurrentCount++;
-      up(0.5);
+      up(0.25);
     
       if (upForceIntervalCurrentCount <= upForceIntervalCount) {
         // 다음 인터벌을 조금씩 증가시킵니다.
