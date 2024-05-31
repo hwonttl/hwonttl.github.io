@@ -1,11 +1,14 @@
 .App {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  align-items: center;
   height: 100vh;
 }
 
 .control-panel {
   width: 300px;
+  max-width: 600px;
+  margin-bottom: 20px;
   padding: 20px;
   background-color: #f8f8f8;
   border-left: 1px solid #ddd;
@@ -67,6 +70,12 @@
 .button-container button {
   margin: 10px;
   padding: 10px 20px; /* 버튼 안쪽 여백 */
+}
+
+.restaurant-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .add-button {
@@ -151,4 +160,27 @@
 .open-map-link {
   margin-left: 5px;
   margin-right: 5px;
+}
+
+.control-panel {
+  min-height: 100%;
+}
+
+/* Horizontal layout for wider screens */
+@media (min-width: 768px) {
+  .App {
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .control-panel {
+    width: 250px;
+    margin-right: 20px;
+    margin-bottom: 0;
+  }
+
+  .roulette-container {
+    flex: 1;
+  }
 }
