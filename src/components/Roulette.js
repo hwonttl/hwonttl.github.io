@@ -248,22 +248,46 @@ const Roulette = ({ candidates, onDraw }) => {
       }
     }
 
+    let isDrawing = false;
     const draw = () => {
+      if (isDrawing) {
+        return;
+      }else{
+        isDrawing = true;
+      }
+
       rotationForceInterval = setInterval(applyRotationalForce, 10);
       dynamicAutoUpInterval();
 
       up(0.2);
 
       setTimeout(() => {
-        for (let i = 0; i < parts.length; i++) {
-          if (i > removeRange[0] && i <= removeRange[1]) {
-            Composite.remove(world, parts[i]);
-          }
-        }
-      }, 5000+Math.floor(Math.random()*7000));
+        clearShield();
+      }, 4000+Math.floor(Math.random()*7000));
     };
 
+    let hasShield = true;
+    const clearShield = () => {
+      debugger; 
+      if (!hasShield||!isDrawing) {
+        return;
+      }
+      else{
+        hasShield = false;
+      }
+
+      for (let i = 0; i < parts.length; i++) {
+        if (i > removeRange[0] && i <= removeRange[1]) {
+          Composite.remove(world, parts[i]);
+        }
+      }
+
+      hasShield = false;
+    }
+
     const reset = () => {
+      hasShield = true;
+      isDrawing = false;
       onDraw(null);
     };
 
@@ -281,6 +305,13 @@ const Roulette = ({ candidates, onDraw }) => {
     const resetButton = document.getElementById("reset-button");
     if (resetButton) {
       resetButton.addEventListener("click", reset);
+    }
+
+    const forceopenButton = document.getElementById("forceopen-button");
+    if (forceopenButton) {
+      forceopenButton.addEventListener("click", () => {
+        clearShield();
+      });
     }
 
     const upButton = document.getElementById("up-button");
@@ -311,6 +342,9 @@ const Roulette = ({ candidates, onDraw }) => {
         <div className="roulette-buttons">
           <button id="draw-button" className="draw-button">
             Draw
+          </button>
+          <button id="forceopen-button" className="forceopen-button">
+            Open
           </button>
           <button id="up-button" className="up-button" style={{display: "none"}}>
             Up!

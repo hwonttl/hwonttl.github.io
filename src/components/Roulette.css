@@ -52,6 +52,24 @@
     background-color: #0056b3;
   }
 
+  .forceopen-button {
+    padding: 10px 20px;
+    font-size: 18px;
+    color: white;
+    background-color: #ffc107;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .forceopen-button:hover {
+    background-color: #d39e00;
+  }
+
   .reset-button {
     padding: 10px 20px;
     font-size: 18px;
