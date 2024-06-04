@@ -66,7 +66,7 @@ const Roulette = ({ candidates, onDraw }) => {
       const x = 400 + Math.cos((i * Math.PI) / 180) * radius;
       const y = 350 + Math.sin((i * Math.PI) / 180) * radius;
 
-      const part = Bodies.rectangle(x, y, 10, 10, {
+      const part = Bodies.rectangle(x, y, 20, 20, {
         isStatic: true,
         angle: (i * Math.PI) / 180,
         restitution: WALL_RESTITUTION,
@@ -95,7 +95,7 @@ const Roulette = ({ candidates, onDraw }) => {
     const pipeLeft = Bodies.rectangle(
       400 - pipeWidth / 2,
       pipeY,
-      10,
+      20,
       pipeHeight,
       {
         restitution: 0,
@@ -107,7 +107,7 @@ const Roulette = ({ candidates, onDraw }) => {
     const pipeRight = Bodies.rectangle(
       400 + pipeWidth / 2,
       pipeY,
-      10,
+      20,
       pipeHeight,
       {
         restitution: 0.1,
@@ -153,10 +153,10 @@ const Roulette = ({ candidates, onDraw }) => {
     Composite.add(world, balls);
 
     const runner = Runner.create({
-      isFixed: true,      // 고정된 시간 간격 사용
-      delta: 1000 / 120,  // 120Hz로 설정 (1000ms / 120 = 8.33ms)
-      fps: 60,           // 목표 프레임 속도
-      deltaMax: 1000 / 120 // 최대 delta 시간 (60Hz에 해당)
+      isFixed: true,      
+      delta: 1000 / 144,  
+      fps: 60,           
+      deltaMax: 1000 / 144
   });
     Runner.run(runner, engine);
     Render.run(render);
